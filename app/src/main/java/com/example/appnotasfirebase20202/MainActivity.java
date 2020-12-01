@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private String TAG = "LFNOT";
     final private String collection = "notes";
     private ListView lv_main_notas;
-    private Button btn_main_nuevo;
+    private Button btn_main_nuevo, btn_main_login;
     private ArrayList<NotaModel> list;
     private NotaAdapter adapter;
     private NotaModel model;
@@ -45,11 +45,19 @@ public class MainActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         lv_main_notas = findViewById(R.id.lv_main_notas);
         btn_main_nuevo = findViewById(R.id.btn_main_nuevo);
+        btn_main_login = findViewById(R.id.btn_main_login);
 
         btn_main_nuevo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 goToRegister();
+            }
+        });
+
+        btn_main_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToLogin();
             }
         });
 
@@ -91,5 +99,15 @@ public class MainActivity extends AppCompatActivity {
     private void goToRegister(){
         Intent nuevo = new Intent(this, RegistroActivity.class);
         startActivity(nuevo);
+    }
+
+    private void goToLogin(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
+
+    private void goToActivity(Class dClass){
+        Intent intent = new Intent(this, dClass);
+        startActivity(intent);
     }
 }
