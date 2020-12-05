@@ -6,6 +6,7 @@ public class NotaModel implements Serializable {
     private int _id;
     private String titulo;
     private String contenido;
+    private String fbId;
 
     public NotaModel() {
     }
@@ -13,6 +14,12 @@ public class NotaModel implements Serializable {
     public NotaModel(String titulo, String contenido) {
         this.titulo = titulo;
         this.contenido = contenido;
+    }
+
+    public NotaModel(String titulo, String contenido, String fbId) {
+        this.titulo = titulo;
+        this.contenido = contenido;
+        this.fbId = fbId;
     }
 
     public NotaModel(int _id, String titulo, String contenido) {
@@ -27,6 +34,7 @@ public class NotaModel implements Serializable {
                 "_id=" + _id +
                 ", titulo='" + titulo + '\'' +
                 ", contenido='" + contenido + '\'' +
+                ", fbId='" + fbId + '\'' +
                 '}';
     }
 
@@ -52,5 +60,13 @@ public class NotaModel implements Serializable {
 
     public void setContenido(String contenido) {
         this.contenido = contenido;
+    }
+
+    public String getFbId() {
+        return fbId;
+    }
+
+    public void setFbId(String fbId) {
+        this.fbId = fbId;
     }
 }
