@@ -56,14 +56,35 @@ public class MainActivity extends AppCompatActivity {
         list = new ArrayList<>();
 
         db.collection(collection)
+            .get()
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            //Log.d(TAG, document.getId() + " => " + document.getData());
+                            model = document.toObject(NotaModel.class);
+                            model.setFbId(document.getId());
+                            list.add(model);
+                        }
+                        adapter = new NotaAdapter(getApplicationContext(), list);
+                        lv_main_notas.setAdapter(adapter);
+                    } else {
+                        Log.w(TAG, "Error getting documents.", task.getException());
+                    }
+                }
+            });
+
+        db.collection(collection)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                //Log.d(TAG, document.getId() + " => " + document.getData());
                                 model = document.toObject(NotaModel.class);
+                                model.setFbId(document.getId());
                                 list.add(model);
                             }
                             adapter = new NotaAdapter(getApplicationContext(), list);
@@ -79,11 +100,7 @@ public class MainActivity extends AppCompatActivity {
         lv_main_notas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getApplicationContext(), String.valueOf(list.get(i).getTitulo()), Toast.LENGTH_LONG).show();
-                /*model = list.get(i);
-                Intent detalle = new Intent(MainActivity.this, DetalleActivity.class);
-                detalle.putExtra("model", model);
-                startActivity(detalle);*/
+                goToDetail(list.get(i).getFbId());
             }
         });
     }
@@ -91,5 +108,11 @@ public class MainActivity extends AppCompatActivity {
     private void goToRegister(){
         Intent nuevo = new Intent(this, RegistroActivity.class);
         startActivity(nuevo);
+    }
+
+    private void goToDetail(String id){
+        Intent intent = new Intent(this, DetalleActivity.class);
+        intent.putExtra("id", id);
+        startActivity(intent);
     }
 }
