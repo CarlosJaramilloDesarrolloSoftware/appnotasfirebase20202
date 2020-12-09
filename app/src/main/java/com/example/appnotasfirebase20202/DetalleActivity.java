@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -39,6 +40,10 @@ public class DetalleActivity extends AppCompatActivity {
         }else{
             tv_detalle_titulo.setText("No recibimos nada");
         }
+
+
+
+
     }
 
     private void updateUI(String id){
@@ -55,12 +60,29 @@ public class DetalleActivity extends AppCompatActivity {
                         tv_detalle_titulo.setText(model.getTitulo());
                         tv_detalle_contenido.setText(model.getContenido());
                     }
+
+                    updateModel(model);
                 }
             }
         });
+
+
     }
 
     private void updateModel(NotaModel model){
+        model.setTitulo(tv_detalle_titulo.getText().toString());
 
+        String cont = tv_detalle_titulo.getText().toString();
+        model.setContenido(cont);
+        documentReference = db.collection(collection).document(model.getFbId());
+        documentReference.set(model)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Log.d(TAG, "Dio");
+                        }
+                    }
+                });
     }
 }
